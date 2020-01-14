@@ -28,6 +28,12 @@ void UOpenDoor::BeginPlay()
 	// GetOwner()->SetActorRotation(CurrentRotation);
 	
 	UE_LOG(LogTemp, Warning, TEXT( "%s Yaw: %f"), *Name, CurrentRotation.Yaw);
+	if (IsValid(PressurePlate))
+	{
+		FString PlateName = PressurePlate->GetName();
+		FVector PlateLocation = PressurePlate->GetActorLocation();
+		UE_LOG(LogTemp, Warning, TEXT( "%s Pos: %s"), *PlateName, *PlateLocation.ToString());
+	}
 }
 
 
