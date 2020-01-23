@@ -3,6 +3,8 @@
 
 #include "OpenDoor.h"
 #include "GameFramework/Actor.h"
+#include "Engine/World.h"
+#include "GameFramework/PlayerController.h"
 
 // Sets default values for this component's properties
 UOpenDoor::UOpenDoor()
@@ -34,6 +36,13 @@ void UOpenDoor::BeginPlay()
 		FVector PlateLocation = PressurePlate->GetActorLocation();
 		UE_LOG(LogTemp, Warning, TEXT( "%s Pos: %s"), *PlateName, *PlateLocation.ToString());
 	}
+
+	ActorThatOpen = GetWorld()->GetFirstPlayerController()->GetPawn();
+
+	if (!PressurePlate)
+	{
+		UE_LOG(LogTemp, Error, TEXT("%s has no pressure plate"), *GetOwner()->GetName());
+	}
 }
 
 
@@ -44,7 +53,6 @@ void UOpenDoor::TickComponent(float DeltaTime, ELevelTick TickType, FActorCompon
 
 	if (IsValid(PressurePlate) && IsValid(ActorThatOpen) && PressurePlate->IsOverlappingActor(ActorThatOpen))
 	{
-
 		OpenDoor(DeltaTime);	
 	}
 }
