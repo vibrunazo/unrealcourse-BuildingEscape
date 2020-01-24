@@ -3,6 +3,8 @@
 
 #include "GameFramework/PlayerController.h"
 #include "GameFramework/Pawn.h"
+#include "DrawDebugHelpers.h"
+#include "Engine/World.h"
 #include "Grabber.h"
 
 #define OUT
@@ -40,6 +42,8 @@ void UGrabber::TickComponent(float DeltaTime, ELevelTick TickType, FActorCompone
 	if (!MyCont) { return; }
 	FVector ViewLoc; FRotator ViewRot;
 	MyCont->GetPlayerViewPoint(OUT ViewLoc, OUT ViewRot);
-	UE_LOG(LogTemp, Warning, TEXT("Grabber ViewLoc: %s ViewRot: %s"), *ViewLoc.ToString(), *ViewRot.ToString());
+	// UE_LOG(LogTemp, Warning, TEXT("Grabber ViewLoc: %s ViewRot: %s"), *ViewLoc.ToString(), *ViewRot.ToString());
+	FVector LineEnd = ViewLoc + ViewRot.Vector() * Reach;
+	DrawDebugLine(GetWorld(), ViewLoc, LineEnd, FColor::Green, false, 1.f, 0, 5.f);
 }
 
