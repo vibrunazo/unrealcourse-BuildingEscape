@@ -36,8 +36,10 @@ void UOpenDoor::BeginPlay()
 		FVector PlateLocation = PressurePlate->GetActorLocation();
 		UE_LOG(LogTemp, Warning, TEXT( "%s Pos: %s"), *PlateName, *PlateLocation.ToString());
 	}
-
-	ActorThatOpen = GetWorld()->GetFirstPlayerController()->GetPawn();
+	if (!ActorThatOpen)
+	{
+		ActorThatOpen = GetWorld()->GetFirstPlayerController()->GetPawn();
+	}
 
 	if (!PressurePlate)
 	{
@@ -53,22 +55,26 @@ void UOpenDoor::TickComponent(float DeltaTime, ELevelTick TickType, FActorCompon
 
 	if (IsValid(PressurePlate) && IsValid(ActorThatOpen) && PressurePlate->IsOverlappingActor(ActorThatOpen))
 	{
-		OpenDoor(DeltaTime);
+		OpenDoor(DeltaTime, OpenSpeed);
+		DoorLastOpened = GetWorld()->GetTimeSeconds();
 	}
 	else
 	{
-		OpenDoor(-DeltaTime);
+		if (GetWorld()->GetTimeSeconds() - DoorLastOpened >= DoorCloseDelay)
+		{
+			OpenDoor(DeltaTime, -CloseSpeed);
+		}
 	}
 }
  	// float CurrentYaw = FMath::Lerp(CurrentRotation.Yaw, InitialYaw + TargetYaw, 0.04f);
-void UOpenDoor::OpenDoor(float DeltaTime)
+void UOpenDoor::OpenDoor(float DeltaTime, float Speed)
 {
 	FRotator CurrentRotation = GetOwner()->GetActorRotation();
-	if (YawAlpha >= 1 && DeltaTime > 0 || YawAlpha <= 0 && DeltaTime < 0) 
+	if (YawAlpha >= 1 && Speed > 0 || YawAlpha <= 0 && Speed < 0) 
 	{
 		return;
 	}
-	YawAlpha += OpenSpeed * DeltaTime;
+	YawAlpha += Speed * DeltaTime;
 	float CurrentYaw = FMath::Lerp(InitialYaw, InitialYaw + TargetYaw, YawAlpha);
 	CurrentRotation.Yaw = CurrentYaw;
 	GetOwner()->SetActorRotation(CurrentRotation);
