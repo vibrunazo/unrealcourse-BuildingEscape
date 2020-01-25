@@ -6,6 +6,8 @@
 #include "Components/ActorComponent.h"
 #include "Grabber.generated.h"
 
+class UPhysicsHandleComponent;
+class UInputComponent;
 
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
 class BUILDINGESCAPE_API UGrabber : public UActorComponent
@@ -20,12 +22,17 @@ protected:
 	// Called when the game starts
 	virtual void BeginPlay() override;
 
-	UPROPERTY(EditAnywhere, Category="Grabber")
-	float Reach = 120.0f;
-
 public:	
 	// Called every frame
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 
+private:
+	UPROPERTY(EditAnywhere, Category="Grabber")
+	float Reach = 120.0f;
+
+	UPhysicsHandleComponent* PhysicsHandle = nullptr;
+	UInputComponent* InputComp = nullptr;
+
+	void Grab();
 		
 };

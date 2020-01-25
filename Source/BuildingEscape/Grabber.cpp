@@ -5,6 +5,8 @@
 #include "GameFramework/Pawn.h"
 #include "DrawDebugHelpers.h"
 #include "Engine/World.h"
+#include "PhysicsEngine/PhysicsHandleComponent.h"
+#include "Components/InputComponent.h"
 #include "Grabber.h"
 
 #define OUT
@@ -25,8 +27,22 @@ void UGrabber::BeginPlay()
 {
 	Super::BeginPlay();
 
-	// ...
-	UE_LOG(LogTemp, Warning, TEXT("Grabber reporting for duty"));
+	// UE_LOG(LogTemp, Warning, TEXT("Grabber reporting for duty"));
+	PhysicsHandle = GetOwner()->FindComponentByClass<UPhysicsHandleComponent>();
+	if (PhysicsHandle)
+	{
+		UE_LOG(LogTemp, Warning, TEXT("Yes physics handle on %s is %s"), *GetOwner()->GetName(), *PhysicsHandle->GetName());
+	} else {
+		UE_LOG(LogTemp, Error, TEXT("No physics handle on %s"), *GetOwner()->GetName());
+	}
+	InputComp = GetOwner()->InputComponent;
+	if (InputComp)
+	{
+		UE_LOG(LogTemp, Warning, TEXT("Yes InputComp on %s is %s"), *GetOwner()->GetName(), *InputComp->GetName());
+		InputComp->BindAction("Grab", IE_Pressed, this, &UGrabber::Grab);
+	} else {
+		UE_LOG(LogTemp, Error, TEXT("No InputComp on %s"), *GetOwner()->GetName());
+	}
 	
 }
 
@@ -55,3 +71,7 @@ void UGrabber::TickComponent(float DeltaTime, ELevelTick TickType, FActorCompone
 	}
 }
 
+void UGrabber::Grab()
+{
+	UE_LOG(LogTemp, Warning, TEXT("GRABBIT GRABBIT"));
+}
