@@ -40,6 +40,7 @@ void UGrabber::BeginPlay()
 	{
 		UE_LOG(LogTemp, Warning, TEXT("Yes InputComp on %s is %s"), *GetOwner()->GetName(), *InputComp->GetName());
 		InputComp->BindAction("Grab", IE_Pressed, this, &UGrabber::Grab);
+		InputComp->BindAction("Grab", IE_Released, this, &UGrabber::Release);
 	} else {
 		UE_LOG(LogTemp, Error, TEXT("No InputComp on %s"), *GetOwner()->GetName());
 	}
@@ -74,4 +75,9 @@ void UGrabber::TickComponent(float DeltaTime, ELevelTick TickType, FActorCompone
 void UGrabber::Grab()
 {
 	UE_LOG(LogTemp, Warning, TEXT("GRABBIT GRABBIT"));
+}
+
+void UGrabber::Release()
+{
+	UE_LOG(LogTemp, Warning, TEXT("UNGRABBIT UNGRABBIT"));
 }
