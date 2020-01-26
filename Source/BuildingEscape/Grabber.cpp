@@ -99,7 +99,7 @@ FHitResult UGrabber::GetFirstActorHit()
 	SetGrabLocation();
 	// DrawDebugLine(GetWorld(), ViewLoc, LineEnd, FColor::Green, false, 1.f, 0, 5.f);
 	FCollisionQueryParams TraceParams(FName(TEXT("")), false, GetOwner());
-	GetWorld()->LineTraceSingleByObjectType(OUT Hit, GetOwner()->GetActorLocation(), GrabLocation, FCollisionObjectQueryParams(ECollisionChannel::ECC_PhysicsBody), TraceParams);
+	GetWorld()->LineTraceSingleByObjectType(OUT Hit, ViewLoc, GrabLocation, FCollisionObjectQueryParams(ECollisionChannel::ECC_PhysicsBody), TraceParams);
 	// AActor* ActorThatGotHit = Hit.GetActor();
 	// return ActorThatGotHit;
 	return Hit;
@@ -111,7 +111,7 @@ void UGrabber::SetGrabLocation()
 	if (!IsValid(MyPawn)) { return; }
 	AController* MyCont = MyPawn->GetController();
 	if (!MyCont) { return; }
-	FVector ViewLoc; FRotator ViewRot;
+	FRotator ViewRot;
 	MyCont->GetPlayerViewPoint(OUT ViewLoc, OUT ViewRot);
 	GrabLocation = ViewLoc + ViewRot.Vector() * Reach;
 }

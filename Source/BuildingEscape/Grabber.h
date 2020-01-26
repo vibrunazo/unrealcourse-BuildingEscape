@@ -32,6 +32,7 @@ private:
 	float Reach = 120.0f;
 
 	FVector GrabLocation;
+	FVector ViewLoc;
 	UPhysicsHandleComponent* PhysicsHandle = nullptr;
 	UInputComponent* InputComp = nullptr;
 
