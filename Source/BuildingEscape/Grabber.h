@@ -9,6 +9,7 @@
 class UPhysicsHandleComponent;
 class UInputComponent;
 class AActor;
+struct FVector;
 
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
 class BUILDINGESCAPE_API UGrabber : public UActorComponent
@@ -30,10 +31,12 @@ private:
 	UPROPERTY(EditAnywhere, Category="Grabber")
 	float Reach = 120.0f;
 
+	FVector GrabLocation;
 	UPhysicsHandleComponent* PhysicsHandle = nullptr;
 	UInputComponent* InputComp = nullptr;
 
 	void FindPhysicsHandle();
 	void SetupInputComponent();
-	AActor* GetFirstActorHit();
+	FHitResult GetFirstActorHit();
+	void SetGrabLocation();
 };
