@@ -20,6 +20,8 @@ protected:
 	// Called when the game starts
 	virtual void BeginPlay() override;
 
+	float TotalMassOfActors() const;
+
 public:
 	// Called every frame
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction *ThisTickFunction) override;
@@ -32,6 +34,8 @@ private:
 	float CloseSpeed = 1.2f;
 	UPROPERTY(EditAnywhere, Category="OpenDoor")
 	float TargetYaw = 90.f;
+	UPROPERTY(EditAnywhere, Category="OpenDoor")
+	float MassToOpen = 100.f;
 	float InitialYaw;
 	float YawAlpha = 0.f;
 	UPROPERTY(EditAnywhere, Category="OpenDoor")
@@ -42,4 +46,5 @@ private:
 	float DoorLastOpened = 0.f;
 	UPROPERTY(EditAnywhere)
 	float DoorCloseDelay = 1.f;
+
 };
