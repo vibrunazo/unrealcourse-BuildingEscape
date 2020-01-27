@@ -36,7 +36,7 @@ void UGrabber::BeginPlay()
 void UGrabber::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
-
+	if (!PhysicsHandle) {return;}
 	if (PhysicsHandle->GrabbedComponent)
 	{
 		SetGrabLocation();
@@ -46,7 +46,7 @@ void UGrabber::TickComponent(float DeltaTime, ELevelTick TickType, FActorCompone
 
 void UGrabber::Grab()
 {
-	UE_LOG(LogTemp, Warning, TEXT("GRABBIT GRABBIT"));
+	if (!PhysicsHandle) {return;}
 	// Try and reach any actors with physics body
 	FHitResult Hit = GetFirstActorHit();
 	AActor* HitActor = Hit.GetActor();
@@ -59,7 +59,7 @@ void UGrabber::Grab()
 
 void UGrabber::Release()
 {
-	UE_LOG(LogTemp, Warning, TEXT("UNGRABBIT UNGRABBIT"));
+	if (!PhysicsHandle) {return;}
 	PhysicsHandle->ReleaseComponent();
 }
 
@@ -87,21 +87,10 @@ void UGrabber::SetupInputComponent()
 FHitResult UGrabber::GetFirstActorHit()
 {
 	FHitResult Hit;
-	// APawn* MyPawn = Cast<APawn>(GetOwner());
-	// if (!IsValid(MyPawn)) { return Hit; }
-	// AController* MyCont = MyPawn->GetController();
-	// if (!MyCont) { return Hit; }
-	// FVector ViewLoc; FRotator ViewRot;
-	// MyCont->GetPlayerViewPoint(OUT ViewLoc, OUT ViewRot);
-	// // UE_LOG(LogTemp, Warning, TEXT("Grabber ViewLoc: %s ViewRot: %s"), *ViewLoc.ToString(), *ViewRot.ToString());
-	// FVector LineEnd = ViewLoc + ViewRot.Vector() * Reach;
-	// GrabLocation = LineEnd;
 	SetGrabLocation();
 	// DrawDebugLine(GetWorld(), ViewLoc, LineEnd, FColor::Green, false, 1.f, 0, 5.f);
 	FCollisionQueryParams TraceParams(FName(TEXT("")), false, GetOwner());
 	GetWorld()->LineTraceSingleByObjectType(OUT Hit, ViewLoc, GrabLocation, FCollisionObjectQueryParams(ECollisionChannel::ECC_PhysicsBody), TraceParams);
-	// AActor* ActorThatGotHit = Hit.GetActor();
-	// return ActorThatGotHit;
 	return Hit;
 }
 

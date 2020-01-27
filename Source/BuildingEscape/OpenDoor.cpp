@@ -39,10 +39,6 @@ void UOpenDoor::BeginPlay()
 		FVector PlateLocation = PressurePlate->GetActorLocation();
 		UE_LOG(LogTemp, Warning, TEXT( "%s Pos: %s"), *PlateName, *PlateLocation.ToString());
 	}
-	if (!ActorThatOpen)
-	{
-		ActorThatOpen = GetWorld()->GetFirstPlayerController()->GetPawn();
-	}
 
 	if (!PressurePlate)
 	{
@@ -89,8 +85,6 @@ float UOpenDoor::TotalMassOfActors() const
 	float TotalMass = 0.0f;
 	TArray<UPrimitiveComponent*> OverlappingComps;
 	PressurePlate->GetOverlappingComponents(OUT OverlappingComps);
-	// TArray<AActor*> OverlappingActors;
-	// PressurePlate->GetOverlappingActors(OUT OverlappingActors);
 
 	for (auto &&Comp : OverlappingComps)
 	{
