@@ -33,7 +33,9 @@ private:
 
 	FVector GrabLocation;
 	FVector ViewLoc;
+	UPROPERTY()
 	UPhysicsHandleComponent* PhysicsHandle = nullptr;
+	UPROPERTY()
 	UInputComponent* InputComp = nullptr;
 
 	void FindPhysicsHandle();

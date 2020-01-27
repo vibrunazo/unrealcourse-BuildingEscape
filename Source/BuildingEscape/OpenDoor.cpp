@@ -3,9 +3,11 @@
 
 #include "OpenDoor.h"
 #include "GameFramework/Actor.h"
+#include "Components/ActorComponent.h"
 #include "Engine/World.h"
 #include "Components/PrimitiveComponent.h"
 #include "GameFramework/PlayerController.h"
+#include "Components/AudioComponent.h"
 
 #define OUT
 
@@ -32,7 +34,11 @@ void UOpenDoor::BeginPlay()
 	// CurrentRotation.Yaw += 90;
 	// GetOwner()->SetActorRotation(CurrentRotation);
 	
-	UE_LOG(LogTemp, Warning, TEXT( "%s Yaw: %f"), *Name, CurrentRotation.Yaw);
+	FindAudioComponent();
+}
+
+void UOpenDoor::PressurePlateLog()
+{
 	if (IsValid(PressurePlate))
 	{
 		FString PlateName = PressurePlate->GetName();
@@ -66,6 +72,15 @@ void UOpenDoor::TickComponent(float DeltaTime, ELevelTick TickType, FActorCompon
 		}
 	}
 }
+
+void UOpenDoor::FindAudioComponent()
+{
+	AudioComp = GetOwner()->FindComponentByClass<UAudioComponent>();
+	if (!AudioComp)
+	{
+		UE_LOG(LogTemp, Error, TEXT("%s missing audio component!"), *GetOwner()->GetName());
+	}
+}
  	// float CurrentYaw = FMath::Lerp(CurrentRotation.Yaw, InitialYaw + TargetYaw, 0.04f);
 void UOpenDoor::OpenDoor(float DeltaTime, float Speed)
 {
@@ -78,6 +93,12 @@ void UOpenDoor::OpenDoor(float DeltaTime, float Speed)
 	float CurrentYaw = FMath::Lerp(InitialYaw, InitialYaw + TargetYaw, YawAlpha);
 	CurrentRotation.Yaw = CurrentYaw;
 	GetOwner()->SetActorRotation(CurrentRotation);
+
+	if (LastSpeed != Speed)
+	{
+		AudioComp->Play();
+		LastSpeed = Speed;
+	}
 }
 
 float UOpenDoor::TotalMassOfActors() const

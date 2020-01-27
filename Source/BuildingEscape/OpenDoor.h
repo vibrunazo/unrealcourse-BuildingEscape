@@ -7,6 +7,8 @@
 #include "Engine/TriggerVolume.h"
 #include "OpenDoor.generated.h"
 
+class UAudioComponent;
+
 UCLASS(ClassGroup = (Custom), meta = (BlueprintSpawnableComponent))
 class BUILDINGESCAPE_API UOpenDoor : public UActorComponent
 {
@@ -19,8 +21,6 @@ public:
 protected:
 	// Called when the game starts
 	virtual void BeginPlay() override;
-
-	float TotalMassOfActors() const;
 
 public:
 	// Called every frame
@@ -36,6 +36,11 @@ private:
 	float TargetYaw = 90.f;
 	UPROPERTY(EditAnywhere, Category="OpenDoor")
 	float MassToOpen = 100.f;
+	float LastSpeed = 0.0f;
+	
+	UPROPERTY()
+	UAudioComponent* AudioComp = nullptr;
+
 	float InitialYaw;
 	float YawAlpha = 0.f;
 	UPROPERTY(EditAnywhere, Category="OpenDoor")
@@ -44,5 +49,9 @@ private:
 	float DoorLastOpened = 0.f;
 	UPROPERTY(EditAnywhere)
 	float DoorCloseDelay = 1.f;
+
+	float TotalMassOfActors() const;
+	void FindAudioComponent();
+	void PressurePlateLog();
 
 };
